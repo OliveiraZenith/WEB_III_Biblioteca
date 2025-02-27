@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "titulo": "Harry Potter e a ordem da fênix",
+    "autor": {
+      "id": 1,
+      "nome": "J.K",
+      "nacionalidade": "Inglesa"
+    },
+    "anoPublicacao": "2000",
+    "isbn": "58451"
+  }
+]

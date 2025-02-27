@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Biblioteca</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+  <nav>
+    <li><a href="usuario.html">Cadastrar usuarios</a></li>
+    <li><a href="autor.html">Cadastrar autor</a></li>
+    <li><a href="index.html">Cadastrar livro</a></li>
+  </nav>
+  <h1>Cadastrar emprestimo</h1>
+
+  <div class="form-container">
+    <form id="emprestimoForm">
+      <div class="form-group">
+        <label for="data_emprestimo">Data de emprestimo</label>
+        <input type="date" id="data_emprestimo" name="data_emprestimo" required>
+      </div>
+      <div class="form-group">
+        <label for="livro">Livro</label>
+        <select class="livro" id="livro" name="livro" required>
+          <option value="">Selecione um livro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="usuario">Usuário</label>
+        <select class="usuario" id="usuario" name="usuario" required>
+          <option value="">Selecione um Usuário</option>
+        </select>
+      </div>
+      <button type="submit">Fazer emprestimo</button>
+    </form>
+
+    <div id="alert" class="alert" style="display: none;"></div>
+  </div>
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("http://localhost:3000/api/livros")
+        .then(response => response.json())
+        .then(livros => {
+          const livroSelect = document.getElementById("livro");
+          livros.forEach(livro => {
+            let option = document.createElement("option");
+            option.value = livro.id;
+            option.textContent = `${livro.titulo} (${livro.autor.nome}) (${livro.anoPublicacao}) (${livro.isbn})`;
+            livroSelect.appendChild(option);
+          });
+        })
+        .catch(error => console.error("Erro ao carregar livros:", error));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("http://localhost:3000/api/usuarios")
+        .then(response => response.json())
+        .then(usuarios => {
+          const usuarioSelect = document.getElementById("usuario");
+          usuarios.forEach(usuario => {
+            let option = document.createElement("option");
+            option.value = usuario.id;
+            option.textContent = `${usuario.nome} (${usuario.email})`;
+            usuarioSelect.appendChild(option);
+          });
+        })
+        .catch(error => console.error("Erro ao carregar usuarios:", error));
+    });
+
+
+    document.getElementById("emprestimoForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const data_emprestimo = document.getElementById("data_emprestimo").value;
+      const livroId = document.getElementById("livro").value; 
+      const usuarioId = document.getElementById("usuario").value;
+
+      console.log("Dados enviados:", { data_emprestimo, livroId, usuarioId});
+
+      fetch("http://localhost:3000/api/emprestimos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data_emprestimo, livroId, usuarioId }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert("Emprestimo cadastrado com sucesso!");
+          document.getElementById("emprestimoForm").reset();
+        })
+        .catch(error => {
+          document.getElementById("alert").style.display = "block";
+          document.getElementById("alert").textContent = "Erro ao cadastrar o emprestimo!";
+        });
+    });
+  </script>
+</body>
+</html>

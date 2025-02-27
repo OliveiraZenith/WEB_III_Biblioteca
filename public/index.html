@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Biblioteca</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+  <nav>
+    <li><a href="usuario.html">Cadastrar usuarios</a></li>
+    <li><a href="autor.html">Cadastrar autor</a></li>
+    <li><a href="emprestimo.html">Emprestimo</a></li>
+  </nav>
+  <h1>Cadastrar Livro</h1>
+
+  <div class="form-container">
+    <form id="livroForm">
+      <div class="form-group">
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" required>
+      </div>
+      <div class="form-group">
+        <label for="autor">Autor</label>
+        <select class="autor" id="autor" name="autor" required>
+          <option value="">Selecione um autor</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="anoPublicacao">Ano</label>
+        <input type="number" id="anoPublicacao" name="anoPublicacao" required>
+      </div>
+      <div class="form-group">
+        <label for="isbn">isbn</label>
+        <input type="number" id="isbn" name="isbn" required>
+      </div>
+      <button type="submit">Cadastrar Livro</button>
+    </form>
+
+    <div id="alert" class="alert" style="display: none;"></div>
+  </div>
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("http://localhost:3000/api/autores")
+        .then(response => response.json())
+        .then(autores => {
+          const autorSelect = document.getElementById("autor");
+          autores.forEach(autor => {
+            let option = document.createElement("option");
+            option.value = autor.id;
+            option.textContent = `${autor.nome} (${autor.nacionalidade})`;
+            autorSelect.appendChild(option);
+          });
+        })
+        .catch(error => console.error("Erro ao carregar autores:", error));
+    });
+
+
+    document.getElementById("livroForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const titulo = document.getElementById("titulo").value;
+      const autorId = document.getElementById("autor").value;
+      const anoPublicacao = document.getElementById("anoPublicacao").value;
+      const isbn = document.getElementById("isbn").value;
+
+      console.log("Dados enviados:", { titulo, autorId, anoPublicacao, isbn });
+
+      fetch("http://localhost:3000/api/livros", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ titulo, autorId, anoPublicacao, isbn }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert("Livro cadastrado com sucesso!");
+          document.getElementById("livroForm").reset();
+        })
+        .catch(error => {
+          document.getElementById("alert").style.display = "block";
+          document.getElementById("alert").textContent = "Erro ao cadastrar o livro!";
+        });
+    });
+  </script>
+</body>
+
+</html>

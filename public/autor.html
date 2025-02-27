@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Biblioteca</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <nav>
+    <li><a href="index.html">Cadastrar livros</a></li>
+    <li><a href="usuario.html">Cadastrar usuario</a></li>
+    <li><a href="emprestimo.html">Emprestimo</a></li>
+  </nav>
+  <h1>Cadastrar Autor</h1>
+
+  <div class="form-container">
+    <form id="autorForm">
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" required>
+      </div>
+      <div class="form-group">
+        <label for="nacionalidade">Nacionalidade</label>
+        <input type="text" id="nacionalidade" name="nacionalidade" required>
+      </div>
+      <button type="submit">Cadastrar Autor</button>
+    </form>
+
+    <div id="alert" class="alert" style="display: none;"></div>
+  </div>
+
+  <script>
+    document.getElementById("autorForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const nacionalidade = document.getElementById("nacionalidade").value;
+
+
+      console.log("Dados enviados:", { nome, nacionalidade });
+
+      fetch("http://localhost:3000/api/autores", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nome, nacionalidade }),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById("alert").style.display = "none";
+        alert("Autor cadastrado com sucesso!");
+        document.getElementById("autorForm").reset();
+      })
+      .catch((error) => {
+        document.getElementById("alert").style.display = "block";
+        document.getElementById("alert").style.display = "block";
+        document.getElementById("alert").textContent = "Erro ao cadastrar o Autor!";
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Biblioteca</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <nav>
+    <li><a href="index.html">Cadastrar livros</a></li>
+    <li><a href="autor.html">Cadastrar autor</a></li>
+    <li><a href="emprestimo.html">Emprestimo</a></li>
+  </nav>
+  <h1>Cadastrar Usuario</h1>
+
+  <div class="form-container">
+    <form id="usuarioForm">
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" required>
+      </div>
+      <div class="form-group">
+        <label for="email">e-mail</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <button type="submit">Cadastrar usuario</button>
+    </form>
+
+    <div id="alert" class="alert" style="display: none;"></div>
+  </div>
+
+  <script>
+    document.getElementById("usuarioForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+
+
+      console.log("Dados enviados:", { nome, email });
+
+      fetch("http://localhost:3000/api/usuarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nome, email }),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById("alert").style.display = "none";
+        alert("Usuario cadastrado com sucesso!");
+        document.getElementById("usuarioForm").reset();
+      })
+      .catch((error) => {
+        document.getElementById("alert").style.display = "block";
+        document.getElementById("alert").style.display = "block";
+        document.getElementById("alert").textContent = "Erro ao cadastrar o Usuario!";
+      });
+    });
+  </script>
+</body>
+</html>
