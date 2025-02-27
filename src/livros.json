@@ -1,13 +1,13 @@
 [
   {
     "id": 1,
-    "titulo": "Harry Potter e a ordem da fênix",
+    "titulo": "Harry Potter e a Ordem da fênix",
     "autor": {
       "id": 1,
       "nome": "J.K",
       "nacionalidade": "Inglesa"
     },
-    "anoPublicacao": "2000",
+    "anoPublicacao": "2003",
     "isbn": "58451"
   }
 ]

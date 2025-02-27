@@ -44,9 +44,9 @@ function cadastrarEmprestimo(req, res) {
     return res.status(400).json({ mensagem: "Usuario não encontrado!" });
   }
   const novoEmprestimo = { 
-    id: emprestimos.length + 1, 
-    livroId, 
-    usuarioId,
+    id: emprestimos.length + 1,
+    titulo: livro.titulo,
+    usuario: usuario.nome,
     data_emprestimo
   };
 
