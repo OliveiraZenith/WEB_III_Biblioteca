@@ -19,3 +19,6 @@ app.use("/api", emprestimoRoutes);
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });
+
+const cors = require("cors");
+app.use(cors());

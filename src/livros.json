@@ -1,13 +1,90 @@
 [
   {
     "id": 1,
-    "titulo": "Harry Potter e a Ordem da fênix",
+    "titulo": "Harry Potter e a Ordem da Fênix",
     "autor": {
       "id": 1,
-      "nome": "J.K",
+      "nome": "J.K. Rowling",
       "nacionalidade": "Inglesa"
     },
     "anoPublicacao": "2003",
     "isbn": "58451"
+  },
+  {
+    "id": 2,
+    "titulo": "1984",
+    "autor": {
+      "id": 2,
+      "nome": "George Orwell",
+      "nacionalidade": "Inglesa"
+    },
+    "anoPublicacao": "1949",
+    "isbn": "978-0451524935"
+  },
+  {
+    "id": 3,
+    "titulo": "Dom Quixote",
+    "autor": {
+      "id": 3,
+      "nome": "Miguel de Cervantes",
+      "nacionalidade": "Espanhola"
+    },
+    "anoPublicacao": "1605",
+    "isbn": "978-0060934347"
+  },
+  {
+    "id": 4,
+    "titulo": "Orgulho e Preconceito",
+    "autor": {
+      "id": 4,
+      "nome": "Jane Austen",
+      "nacionalidade": "Inglesa"
+    },
+    "anoPublicacao": "1813",
+    "isbn": "978-8573265343"
+  },
+  {
+    "id": 5,
+    "titulo": "Cem Anos de Solidão",
+    "autor": {
+      "id": 5,
+      "nome": "Gabriel García Márquez",
+      "nacionalidade": "Colombiana"
+    },
+    "anoPublicacao": "1967",
+    "isbn": "978-8501016074"
+  },
+  {
+    "id": 6,
+    "titulo": "A Revolução dos Bichos",
+    "autor": {
+      "id": 2,
+      "nome": "George Orwell",
+      "nacionalidade": "Inglesa"
+    },
+    "anoPublicacao": "1945",
+    "isbn": "978-8535914849"
+  },
+  {
+    "id": 7,
+    "titulo": "O Pequeno Príncipe",
+    "autor": {
+      "id": 6,
+      "nome": "Antoine de Saint-Exupéry",
+      "nacionalidade": "Francesa"
+    },
+    "anoPublicacao": "1943",
+    "isbn": "978-8595081512"
+  },
+  {
+    "id": 8,
+    "titulo": "Crime e Castigo",
+    "autor": {
+      "id": 7,
+      "nome": "Fiódor Dostoiévski",
+      "nacionalidade": "Russa"
+    },
+    "anoPublicacao": "1866",
+    "isbn": "978-8573265879"
   }
 ]

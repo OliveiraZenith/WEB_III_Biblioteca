@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultar Livros Disponíveis</title>
+  <link rel="stylesheet" href="index.css"> 
+</head>
+
+<body>
+  <nav>
+    <li><a href="usuario.html">Usuários</a></li>
+    <li><a href="autor.html">Autor</a></li>
+    <li><a href="index.html">Livros</a></li>
+    <li><a href="emprestimo.html">Empréstimo</a></li>
+    <li><a href="consultar-livros.html">Livros Disponíveis</a></li>
+  </nav>
+
+  <h1>Consultar Livros Disponíveis</h1>
+
+  <div class="form-container">
+    <h2>Livros Disponíveis:</h2>
+    <ul id="livrosDisponiveis"></ul> 
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+         fetch("http://localhost:3000/api/livros-disponiveis")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Erro na requisição: " + response.statusText);
+          }
+          return response.json();
+        })
+        .then(livros => {
+          const livrosDisponiveisList = document.getElementById("livrosDisponiveis");
+
+          
+          livrosDisponiveisList.innerHTML = "";
+
+          
+          livros.forEach(livro => {
+            const livroItem = document.createElement("li");
+            livroItem.textContent = `${livro.titulo} (${livro.autor.nome}, ${livro.anoPublicacao}) - ISBN: ${livro.isbn}`;
+            livrosDisponiveisList.appendChild(livroItem);
+          });
+        })
+        .catch(error => {
+          console.error("Erro ao carregar livros disponíveis:", error);
+          const livrosDisponiveisList = document.getElementById("livrosDisponiveis");
+          livrosDisponiveisList.innerHTML = "<li>Erro ao carregar livros disponíveis.</li>";
+        });
+    });
+  </script>
+</body>
+
+</html>
