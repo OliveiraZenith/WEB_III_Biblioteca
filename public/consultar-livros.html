@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Consultar Livros Disponíveis</title>
-  <link rel="stylesheet" href="index.css"> 
+  <link rel="stylesheet" href="consultar-livros.css"> 
 </head>
 
 <body>
@@ -21,12 +21,12 @@
 
   <div class="form-container">
     <h2>Livros Disponíveis:</h2>
-    <ul id="livrosDisponiveis"></ul> 
+    <ul id="livrosDisponiveis" class="livros-lista"></ul> 
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-         fetch("http://localhost:3000/api/livros-disponiveis")
+      fetch("http://localhost:3000/api/livros-disponiveis")
         .then(response => {
           if (!response.ok) {
             throw new Error("Erro na requisição: " + response.statusText);
@@ -42,7 +42,15 @@
           
           livros.forEach(livro => {
             const livroItem = document.createElement("li");
-            livroItem.textContent = `${livro.titulo} (${livro.autor.nome}, ${livro.anoPublicacao}) - ISBN: ${livro.isbn}`;
+            livroItem.className = "livro-item"; 
+            livroItem.innerHTML = `
+              <div class="livro-info">
+                <h3>${livro.titulo}</h3>
+                <p><strong>Autor:</strong> ${livro.autor.nome}</p>
+                <p><strong>Ano de Publicação:</strong> ${livro.anoPublicacao}</p>
+                <p><strong>ISBN:</strong> ${livro.isbn}</p>
+              </div>
+            `;
             livrosDisponiveisList.appendChild(livroItem);
           });
         })
