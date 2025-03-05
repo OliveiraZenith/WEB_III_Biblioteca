@@ -16,52 +16,50 @@
         <li><a href="index.html">Livros</a></li>
         <li><a href="emprestimo.html">Empréstimo</a></li>
         <li><a href="consultar-livros.html">Livros Disponíveis</a></li>
-        <li><a href="consultar-emprestimos.html">Empréstimos Feitos</a></li>
+        <li><a href="consulta-emprestimos.html">Consultar empréstimos</a></li>
     </nav>
-    <h1> Consultar empréstimos feitos</h1>
+    <h1>Consultar Empréstimos</h1>
 
     <div class="form-container">
-        <h2>Empréstimos Feitos:</h2>
-        <ul id="Emp-feitos" class="Emprestimos"></ul>
+        <h2>Empréstimos Realizados:</h2>
+        <ul id="emprestimosLista" class="emprestimos-lista"></ul>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-          fetch("http://localhost:3000/api/livros-disponiveis")
-            .then(response => {
-              if (!response.ok) {
-                throw new Error("Erro na requisição: " + response.statusText);
-              }
-              return response.json();
-            })
-            .then(livros => {
-              const livrosDisponiveisList = document.getElementById("livrosDisponiveis");
-    
-              
-              livrosDisponiveisList.innerHTML = "";
-    
-              
-              livros.forEach(livro => {
-                const livroItem = document.createElement("li");
-                livroItem.className = "livro-item"; 
-                livroItem.innerHTML = `
-                  <div class="livro-info">
-                    <h3>${livro.titulo}</h3>
-                    <p><strong>Autor:</strong> ${livro.autor.nome}</p>
-                    <p><strong>Ano de Publicação:</strong> ${livro.anoPublicacao}</p>
-                    <p><strong>ISBN:</strong> ${livro.isbn}</p>
-                  </div>
-                `;
-                livrosDisponiveisList.appendChild(livroItem);
-              });
-            })
-            .catch(error => {
-              console.error("Erro ao carregar livros disponíveis:", error);
-              const livrosDisponiveisList = document.getElementById("livrosDisponiveis");
-              livrosDisponiveisList.innerHTML = "<li>Erro ao carregar livros disponíveis.</li>";
-            });
+            fetch("http://localhost:3000/api/emprestimos/todos") // Rota correta
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erro na requisição: " + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(emprestimos => {
+                    const emprestimosLista = document.getElementById("emprestimosLista");
+
+                    emprestimosLista.innerHTML = ""; // Limpa a lista antes de adicionar os empréstimos
+
+                    emprestimos.forEach(emprestimo => {
+                        const emprestimoItem = document.createElement("li");
+                        emprestimoItem.className = "emprestimo-item"; // Adicione uma classe para estilização, se necessário
+                        emprestimoItem.innerHTML = `
+                            <div class="emprestimo-info">
+                                <h3>Empréstimo #${emprestimo.id}</h3>
+                                <p><strong>Livro:</strong> ${emprestimo.livroId}</p>
+                                <p><strong>Usuário:</strong> ${emprestimo.usuarioId}</p>
+                                <p><strong>Data de Empréstimo:</strong> ${emprestimo.data_emprestimo}</p>
+                            </div>
+                        `;
+                        emprestimosLista.appendChild(emprestimoItem);
+                    });
+                })
+                .catch(error => {
+                    console.error("Erro ao carregar empréstimos:", error);
+                    const emprestimosLista = document.getElementById("emprestimosLista");
+                    emprestimosLista.innerHTML = "<li>Erro ao carregar empréstimos.</li>";
+                });
         });
-      </script>
+    </script>
 </body>
 
 </html>
