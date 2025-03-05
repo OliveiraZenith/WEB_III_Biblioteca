@@ -58,6 +58,6 @@ function cadastrarEmprestimo(req, res) {
 function listarEmprestimos(req, res) {
   const emprestimos = lerEmprestimos();
   res.json(emprestimos);
-}
+};
 
 module.exports = { cadastrarEmprestimo, listarEmprestimos, lerEmprestimos };

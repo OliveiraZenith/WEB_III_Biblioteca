@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Biblioteca</title>
+    <link rel="stylesheet" href="consultar-livros.css">
+</head>
+
+<body>
+
+    <nav>
+        <li><a href="usuario.html">Usuários</a></li>
+        <li><a href="autor.html">Autor</a></li>
+        <li><a href="index.html">Livros</a></li>
+        <li><a href="emprestimo.html">Empréstimo</a></li>
+        <li><a href="consultar-livros.html">Livros Disponíveis</a></li>
+        <li><a href="consultar-emprestimos.html">Empréstimos Feitos</a></li>
+    </nav>
+    <h1> Consultar empréstimos feitos</h1>
+
+    <div class="form-container">
+        <h2>Empréstimos Feitos:</h2>
+        <ul id="Emp-feitos" class="Emprestimos"></ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          fetch("http://localhost:3000/api/livros-disponiveis")
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("Erro na requisição: " + response.statusText);
+              }
+              return response.json();
+            })
+            .then(livros => {
+              const livrosDisponiveisList = document.getElementById("livrosDisponiveis");
+    
+              
+              livrosDisponiveisList.innerHTML = "";
+    
+              
+              livros.forEach(livro => {
+                const livroItem = document.createElement("li");
+                livroItem.className = "livro-item"; 
+                livroItem.innerHTML = `
+                  <div class="livro-info">
+                    <h3>${livro.titulo}</h3>
+                    <p><strong>Autor:</strong> ${livro.autor.nome}</p>
+                    <p><strong>Ano de Publicação:</strong> ${livro.anoPublicacao}</p>
+                    <p><strong>ISBN:</strong> ${livro.isbn}</p>
+                  </div>
+                `;
+                livrosDisponiveisList.appendChild(livroItem);
+              });
+            })
+            .catch(error => {
+              console.error("Erro ao carregar livros disponíveis:", error);
+              const livrosDisponiveisList = document.getElementById("livrosDisponiveis");
+              livrosDisponiveisList.innerHTML = "<li>Erro ao carregar livros disponíveis.</li>";
+            });
+        });
+      </script>
+</body>
+
+</html>
