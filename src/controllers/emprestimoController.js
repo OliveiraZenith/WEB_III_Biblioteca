@@ -25,10 +25,15 @@ function salvarEmprestimos(emprestimos) {
 
 function cadastrarEmprestimo(req, res) {
   const { livroId, usuarioId, data_emprestimo } = req.body;
-  
+
   if (!livroId || !usuarioId || !data_emprestimo) {
-    return res.status(400).json({ mensagem: "Todos os campos são obrigatórios!" });
+      return res.status(400).json({ erro: "Campos obrigatórios faltando!" });
   }
+
+  // Restante da lógica (buscar livro, usuário, salvar empréstimo)
+  // ...
+  res.status(201).json(novoEmprestimo); // Responda com o objeto criado
+
 
   const emprestimos = lerEmprestimos();
   const livros = lerLivros();
@@ -45,10 +50,12 @@ function cadastrarEmprestimo(req, res) {
   }
   const novoEmprestimo = { 
     id: emprestimos.length + 1,
-    titulo: livro.titulo,
-    usuario: usuario.nome,
+    livroId: livro.id,          // Adiciona o ID do livro
+    livroTitulo: livro.titulo,  // Mantém o título do livro
+    usuarioId: usuario.id,      // Adiciona o ID do usuário
+    usuarioNome: usuario.nome,  // Mantém o nome do usuário
     data_emprestimo
-  };
+};
 
   emprestimos.push(novoEmprestimo);
   salvarEmprestimos(emprestimos);

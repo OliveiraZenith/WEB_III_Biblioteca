@@ -47,7 +47,51 @@
   <script>
 
     document.addEventListener("DOMContentLoaded", function () {
-      fetch("http://localhost:3000/api/livros")
+      const btnCadastrar = document.getElementById("btnCadastrarEmprestimo");
+      btnCadastrar.addEventListener("click", cadastrarEmprestimoFrontend);
+    });
+
+    function cadastrarEmprestimoFrontend() {
+      const livroId = document.getElementById("livroSelect").value;
+      const usuarioId = document.getElementById("usuarioSelect").value;
+      const dataInput = document.getElementById("dataEmprestimo").value;
+
+      // Validação básica
+      if (!livroId || !usuarioId || !dataInput) {
+        alert("Preencha todos os campos!");
+        return;
+      }
+
+      // Enviar dados para o backend
+      fetch("http://localhost:3000/api/emprestimos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          livroId: livroId,
+          usuarioId: usuarioId,
+          data_emprestimo: dataInput
+        }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Erro ao cadastrar empréstimo");
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert("Empréstimo cadastrado com sucesso!");
+          window.location.href = "consulta-emprestimos.html"; // Redirecionar
+        })
+        .catch(error => {
+          console.error("Erro:", error);
+          alert("Falha ao cadastrar empréstimo. Verifique o console.");
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("http://localhost:3000/api/livros-disponiveis")
         .then(response => response.json())
         .then(livros => {
           const livroSelect = document.getElementById("livro");
@@ -81,10 +125,10 @@
       event.preventDefault();
 
       const data_emprestimo = document.getElementById("data_emprestimo").value;
-      const livroId = document.getElementById("livro").value; 
-      const usuarioId = document.getElementById("usuario").value;
+      const livroId = document.getElementById("livroId").value;
+      const usuarioId = document.getElementById("usuarioId").value;
 
-      console.log("Dados enviados:", { data_emprestimo, livroId, usuarioId});
+      console.log("Dados enviados:", { data_emprestimo, livroId, usuarioId });
 
       fetch("http://localhost:3000/api/emprestimos", {
         method: "POST",
@@ -105,4 +149,5 @@
     });
   </script>
 </body>
+
 </html>

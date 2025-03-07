@@ -8,5 +8,15 @@
     "id": 2,
     "nome": "Héricles",
     "email": "hericlesrmm@icloud.com"
+  },
+  {
+    "id": 3,
+    "nome": "1",
+    "email": "moscardinicarvalho1234@gmail.com"
+  },
+  {
+    "id": 4,
+    "nome": "teste",
+    "email": "teste@gmail.com"
   }
 ]
