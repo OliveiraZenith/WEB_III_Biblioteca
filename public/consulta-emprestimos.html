@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Biblioteca</title>
+    <link rel="stylesheet" href="consultar-livros.css">
+</head>
+
+<body>
+
+    <nav>
+        <li><a href="usuario.html">Usuários</a></li>
+        <li><a href="autor.html">Autor</a></li>
+        <li><a href="index.html">Livros</a></li>
+        <li><a href="emprestimo.html">Empréstimo</a></li>
+        <li><a href="consultar-livros.html">Livros Disponíveis</a></li>
+        <li><a href="consulta-emprestimos.html">Consultar empréstimos</a></li>
+    </nav>
+    <h1>Consultar Empréstimos</h1>
+
+    <div class="form-container">
+        <h2>Empréstimos Realizados:</h2>
+        <ul id="emprestimosLista" class="emprestimos-lista"></ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://localhost:3000/api/emprestimos") // Rota correta
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erro na requisição: " + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(emprestimos => {
+                    const emprestimosLista = document.getElementById("emprestimosLista");
+
+                    emprestimosLista.innerHTML = ""; // Limpa a lista antes de adicionar os empréstimos
+
+                    emprestimos.forEach(emprestimo => {
+                        const emprestimoItem = document.createElement("li");
+                        emprestimoItem.className = "emprestimo-item"; // Adicione uma classe para estilização, se necessário
+                        emprestimoItem.innerHTML = `
+                            <div class="emprestimo-info">
+                                <h3>Empréstimo #${emprestimo.id}</h3>
+                                <p><strong>Livro:</strong> ${emprestimo.livro}</p> <!-- Corrigido para livroTitulo -->
+                                <p><strong>Usuário:</strong> ${emprestimo.usuario}</p> <!-- Corrigido para usuarioNome -->
+                                <p><strong>Data de Empréstimo:</strong> ${emprestimo.data_emprestimo}</p>
+                            </div>
+                        `;
+                        emprestimosLista.appendChild(emprestimoItem);
+                    });
+                })
+                .catch(error => {
+                    console.error("Erro ao carregar empréstimos:", error);
+                    const emprestimosLista = document.getElementById("emprestimosLista");
+                    emprestimosLista.innerHTML = "<li>Erro ao carregar empréstimos.</li>";
+                });
+        });
+    </script>
+</body>
+
+</html>

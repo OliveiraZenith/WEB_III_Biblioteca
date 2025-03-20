@@ -16,51 +16,51 @@
     <li><a href="index.html">Livros</a></li>
     <li><a href="emprestimo.html">Empréstimo</a></li>
     <li><a href="consultar-livros.html">Livros Disponíveis</a></li>
+    <li><a href="consulta-emprestimos.html">Empréstimos Feitos</a></li>
   </nav>
-  <h1>Cadastrar emprestimo</h1>
+  <h1>Cadastrar Empréstimo</h1>
 
   <div class="form-container">
     <form id="emprestimoForm">
       <div class="form-group">
-        <label for="data_emprestimo">Data de emprestimo</label>
+        <label for="data_emprestimo">Data de Emprestimo</label>
         <input type="date" id="data_emprestimo" name="data_emprestimo" required>
       </div>
       <div class="form-group">
         <label for="livro">Livro</label>
-        <select class="livro" id="livro" name="livro" required>
+        <select id="livro" name="livro" required>
           <option value="">Selecione um livro</option>
         </select>
       </div>
       <div class="form-group">
         <label for="usuario">Usuário</label>
-        <select class="usuario" id="usuario" name="usuario" required>
+        <select id="usuario" name="usuario" required>
           <option value="">Selecione um Usuário</option>
         </select>
       </div>
-      <button type="submit">Fazer emprestimo</button>
+      <button type="submit">Fazer Empréstimo</button>
     </form>
 
     <div id="alert" class="alert" style="display: none;"></div>
   </div>
 
   <script>
-
     document.addEventListener("DOMContentLoaded", function () {
-      fetch("http://localhost:3000/api/livros")
+      // Carregar livros
+      fetch("http://localhost:3000/api/livros-disponiveis")
         .then(response => response.json())
         .then(livros => {
           const livroSelect = document.getElementById("livro");
           livros.forEach(livro => {
             let option = document.createElement("option");
             option.value = livro.id;
-            option.textContent = `${livro.titulo} (${livro.autor.nome}) (${livro.anoPublicacao}) (${livro.isbn})`;
+            option.textContent = `${livro.titulo} (${livro.autorNome}) (${livro.anoPublicacao}) (${livro.isbn})`;
             livroSelect.appendChild(option);
           });
         })
         .catch(error => console.error("Erro ao carregar livros:", error));
-    });
 
-    document.addEventListener("DOMContentLoaded", function () {
+      // Carregar usuários
       fetch("http://localhost:3000/api/usuarios")
         .then(response => response.json())
         .then(usuarios => {
@@ -72,36 +72,53 @@
             usuarioSelect.appendChild(option);
           });
         })
-        .catch(error => console.error("Erro ao carregar usuarios:", error));
-    });
+        .catch(error => console.error("Erro ao carregar usuários:", error));
 
+      // Envio do formulário
+      const emprestimoForm = document.getElementById("emprestimoForm");
+      emprestimoForm.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    document.getElementById("emprestimoForm").addEventListener("submit", function (event) {
-      event.preventDefault();
+        const livroId = document.getElementById("livro").value;
+        const usuarioId = document.getElementById("usuario").value;
+        const data_emprestimo = document.getElementById("data_emprestimo").value;
 
-      const data_emprestimo = document.getElementById("data_emprestimo").value;
-      const livroId = document.getElementById("livro").value; 
-      const usuarioId = document.getElementById("usuario").value;
+        // Validação básica
+        if (!livroId || !usuarioId || !data_emprestimo) {
+          alert("Preencha todos os campos!");
+          return;
+        }
 
-      console.log("Dados enviados:", { data_emprestimo, livroId, usuarioId});
-
-      fetch("http://localhost:3000/api/emprestimos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data_emprestimo, livroId, usuarioId }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          alert("Emprestimo cadastrado com sucesso!");
-          document.getElementById("emprestimoForm").reset();
+        // Enviar dados para o backend
+        fetch("http://localhost:3000/api/emprestimos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            livroId: livroId,
+            usuarioId: usuarioId,
+            data_emprestimo: data_emprestimo
+          }),
         })
-        .catch(error => {
-          document.getElementById("alert").style.display = "block";
-          document.getElementById("alert").textContent = "Erro ao cadastrar o emprestimo!";
-        });
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Erro ao cadastrar empréstimo");
+            }
+            return response.json();
+          })
+          .then(data => {
+            alert("Empréstimo cadastrado com sucesso!");
+            window.location.href = "consulta-emprestimos.html"; // Redirecionar
+          })
+          .catch(error => {
+            console.error("Erro:", error);
+            alert("Falha ao cadastrar empréstimo. Verifique o console.");
+          });
+      });
     });
   </script>
 </body>
+
 </html>
+ 

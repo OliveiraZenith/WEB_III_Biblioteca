@@ -16,6 +16,7 @@
     <li><a href="index.html">Livros</a></li>
     <li><a href="emprestimo.html">Empréstimo</a></li>
     <li><a href="consultar-livros.html">Livros Disponíveis</a></li>
+    <li><a href="consulta-emprestimos.html">Empréstimos Feitos</a></li>
   </nav>
   <h1>Cadastrar Livro</h1>
 
@@ -73,21 +74,30 @@
 
       console.log("Dados enviados:", { titulo, autorId, anoPublicacao, isbn });
 
-      fetch("http://localhost:3000/api/livros", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ titulo, autorId, anoPublicacao, isbn }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          alert("Livro cadastrado com sucesso!");
-          document.getElementById("livroForm").reset();
+    
+
+      fetch('http://localhost:3000/api/livros')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erro na requisição: ' + response.status);
+          }
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            throw new TypeError('Resposta não é JSON');
+          }
+          return response.json();
+        })
+        .then(livros => {
+          const livroSelect = document.getElementById('livro');
+          livros.forEach(livro => {
+            let option = document.createElement('option');
+            option.value = livro.id;
+            option.textContent = `<span class="math-inline">\{livro\.titulo\} \(</span>{livro.autor.nome}) (<span class="math-inline">\{livro\.anoPublicacao\}\) \(</span>{livro.isbn})`;
+            livroSelect.appendChild(option);
+          });
         })
         .catch(error => {
-          document.getElementById("alert").style.display = "block";
-          document.getElementById("alert").textContent = "Erro ao cadastrar o livro!";
+          console.error('Erro ao carregar livros:', error);
         });
     });
   </script>
